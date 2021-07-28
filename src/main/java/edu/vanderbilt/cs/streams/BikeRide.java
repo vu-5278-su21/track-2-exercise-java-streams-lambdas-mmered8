@@ -125,7 +125,7 @@ public class BikeRide {
     // Hint: see Arrays.stream(...)
     //
     public DoubleStream heartRateStream() {
-        return DoubleStream.empty();
+        return Arrays.stream(this.heartRate);
     }
 
     // @ToDo:
@@ -134,7 +134,7 @@ public class BikeRide {
     // stream of the specified values
     //
     public DoubleStream velocityStream() {
-        return DoubleStream.empty();
+        return Arrays.stream(this.velocity);
     }
 
     // @ToDo:
@@ -142,7 +142,7 @@ public class BikeRide {
     // Implement this method so it returns a
     // stream of the specified values
     public DoubleStream gradeStream() {
-        return DoubleStream.empty();
+        return Arrays.stream(this.grade);
     }
 
     // @ToDo:
@@ -150,7 +150,7 @@ public class BikeRide {
     // Implement this method so it returns a
     // stream of the specified values
     public DoubleStream altitudeStream() {
-        return DoubleStream.empty();
+        return Arrays.stream(this.altitude);
     }
 
     // @ToDo:
@@ -158,7 +158,7 @@ public class BikeRide {
     // Implement this method so it returns a
     // stream of the specified values
     public Stream<LatLng> coordinateStream() {
-        return Stream.empty();
+        return Arrays.stream(this.coordinates);
     }
 
 
@@ -171,7 +171,16 @@ public class BikeRide {
     // data arrays (e.g., heartRate, velocity, etc.)
     //
     public Stream<DataFrame> fusedFramesStream() {
-        return Stream.empty();
+    	//LatLng coordinate, double grade, double altitude, double velocity, double heartRate
+    	DataFrame[] newDataArray = new DataFrame[this.altitude.length];
+    	
+    	DataFrame newData = null;
+    	for( int i = 0; i < this.altitude.length; i++) {
+    		newData = new DataFrame(this.coordinates[i], this.grade[i], this.altitude[i], this.velocity[i], this.heartRate[i]);
+    		newDataArray[i] = newData;
+    	}
+    	
+        return Arrays.stream(newDataArray);
     }
 
 
