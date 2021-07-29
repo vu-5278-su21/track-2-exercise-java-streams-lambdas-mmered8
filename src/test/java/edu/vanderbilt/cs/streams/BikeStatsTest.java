@@ -1,6 +1,9 @@
 package edu.vanderbilt.cs.streams;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import edu.vanderbilt.cs.streams.BikeRide.LatLng;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,11 +33,21 @@ public class BikeStatsTest {
         assertEquals(expectedVelocityAverage, velocityAverage, 0.1);
 
         // The coordinate should be set by the first item in the window
-        assertEquals(ride.coordinateStream().findFirst().get(),
-                     stats.averagedDataFrameStream(10).findFirst().get().coordinate);
+        LatLng latLng = ride.coordinateStream().findFirst().get();
+        LatLng latLng2 = stats.averagedDataFrameStream(10).findFirst().get().coordinate;
+        
+        assertEquals(ride.coordinateStream().findFirst().get(),                     
+        		stats.averagedDataFrameStream(10).findFirst().get().coordinate);
+        
+        LatLng latLng3 = ride.coordinateStream().skip(1).findFirst().get();
+        LatLng latLng4 = stats.averagedDataFrameStream(10).skip(1).findFirst().get().coordinate;
+        
         assertEquals(ride.coordinateStream().skip(1).findFirst().get(),
                 stats.averagedDataFrameStream(10).skip(1).findFirst().get().coordinate);
 
+        double latLng5 = ride.velocityStream().limit(5).average().getAsDouble();
+        double latLng6 = stats.averagedDataFrameStream(5).findFirst().get().velocity;
+        
         assertEquals(
                 ride.velocityStream().limit(5).average().getAsDouble(),
                 stats.averagedDataFrameStream(5)

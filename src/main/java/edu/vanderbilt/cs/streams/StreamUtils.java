@@ -1,5 +1,6 @@
 package edu.vanderbilt.cs.streams;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
@@ -38,7 +39,10 @@ public class StreamUtils {
         // 3. List.subLIst will be useful to you
         // 4. A windowSize < 1 should return an empty stream
 
-        return Stream.empty();
+    	if(windowSize > data.size() || windowSize < 1) 
+            return Stream.empty();
+        return IntStream.range(0, data.size()-windowSize+1)
+                        .mapToObj(start -> data.subList(start, start+windowSize));
     }
 
     /**
@@ -65,11 +69,22 @@ public class StreamUtils {
      * @return
      */
     public static <T> Function<List<T>, Double> averageOfProperty(ToDoubleFunction<T> f){
-        return (List<T> window) -> {
+        return (List<T> window) -> { 
             // You need to update this code here to
             // return the average of the property that
             // is extracted with the function `f`
-            return 0.0;
+        //assertEquals(3, StreamUtils.averageOfProperty(String::length).apply(data));
+//        double average = window.stream().mapToInt(a->a).average().orElse(0);
+        //const average = (...args) => args.reduce((a, b) => a + b) / args.length;
+//	        List<Double> a = f.applyAsDouble(f->f);
+//        	f.applyAsDouble(window.stream().mapToDouble(x -> x).average());
+        List<Double> arrayListCovert = new ArrayList<Double>();
+        for (T entry : window) {
+        	arrayListCovert.add(f.applyAsDouble(entry));
+        }
+
+            double average = arrayListCovert.stream().mapToDouble(x -> x).average().orElse(0);
+            return average;
         };
     }
 
